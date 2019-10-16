@@ -26,15 +26,6 @@ void MutateStdFunction(iterator begin, iterator end, std::function<void(int&)> m
 }
 
 template<typename iterator>
-void MutateStdFunctionRef(iterator begin, iterator end, const std::function<void(int&)>& mutate)
-{
-   for(;begin != end; ++begin)
-   {
-      mutate(*begin);
-   }
-}
-
-template<typename iterator>
 void MutateFunctionRef(iterator begin, iterator end, const tl::function_ref<void(int&)>& mutate)
 {
    for(;begin != end; ++begin)
@@ -50,45 +41,49 @@ std::vector<int> GetSimpleTestData(const size_t size)
    return result;
 }
 
-TEST_CASE("Performance testing")
+#define RunFunctionMacro(function, dataSetSize, numberOfCalls) \
+{\
+   for(size_t i {0}; i < numberOfCalls; ++i)\
+   {\
+      function(testData.begin(), testData.end(), \
+         [](int& item)\
+         {\
+            item += 5;\
+         });\
+   }\
+}
+
+void RunTest(const size_t dataSetSize, const size_t numberOfCalls)
 {
-   auto testData {GetSimpleTestData(100)};
+   auto testData {GetSimpleTestData(dataSetSize)};
    BENCHMARK("TemplateArg")
    {	
-      MutateTemplate(testData.begin(), testData.end(), 
-         [](int& item)
-         {
-            item += 5;
-         });
+      RunFunctionMacro(MutateTemplate, dataSetSize, numberOfCalls);
    };
 
-   testData = GetSimpleTestData(100);
+   testData = GetSimpleTestData(dataSetSize);
    BENCHMARK("StdFunction")
    {	
-      MutateStdFunction(testData.begin(), testData.end(), 
-         [](int& item)
-         {
-            item += 5;
-         });
+      RunFunctionMacro(MutateStdFunction, dataSetSize, numberOfCalls);
    };
 
-   testData = GetSimpleTestData(100);
-   BENCHMARK("StdFunctionRef")
-   {	
-      MutateStdFunctionRef(testData.begin(), testData.end(), 
-         [](int& item)
-         {
-            item += 5;
-         });
-   };
-
-   testData = GetSimpleTestData(100);
+   testData = GetSimpleTestData(dataSetSize);
    BENCHMARK("FunctionRef")
    {	
-      MutateFunctionRef(testData.begin(), testData.end(), 
-         [](int& item)
-         {
-            item += 5;
-         });
+      RunFunctionMacro(MutateFunctionRef, dataSetSize, numberOfCalls);
    };
+}
+
+TEST_CASE("dataSetSize 1 numberOfCalls 100000000")
+{
+   constexpr const size_t dataSetSize {1};
+   constexpr const size_t numberOfCalls {100'000'000};
+   RunTest(dataSetSize, numberOfCalls);
+}
+
+TEST_CASE("dataSetSize 100000000 numberOfCalls 1")
+{
+   constexpr const size_t dataSetSize {100'000'000};
+   constexpr const size_t numberOfCalls {1};
+   RunTest(dataSetSize, numberOfCalls);
 }

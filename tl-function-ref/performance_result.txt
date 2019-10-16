@@ -1,25 +1,43 @@
+dataSetSize 1 numberOfCalls 100000000
 -------------------------------------------------------------------------------
-Performance testing
--------------------------------------------------------------------------------
-/home/mumakin/cpp_functional_programming/tl-function-ref/main.cpp:125
+/home/mumakin/CppCon2019/tl-function-ref/main.cpp:77
 ...............................................................................
 
 benchmark name                                  samples       iterations    estimated
                                                 mean          low mean      high mean
                                                 std dev       low std dev   high std dev
 -------------------------------------------------------------------------------
-TemplateArg                                             100        44310    66.465 ms
-                                                      12 ns        12 ns        12 ns
-                                                       0 ns         0 ns         0 ns
+TemplateArg                                             100            1    9.39707 s
+                                                 94.7522 ms   94.5981 ms   94.9151 ms
+                                                 806.206 us   707.638 us   927.952 us
 
-StdFunction                                             100         5606   68.9538 ms
-                                                     123 ns       123 ns       123 ns
-                                                       0 ns         0 ns         0 ns
+StdFunction                                             100            1    34.1197 s
+                                                 345.215 ms   344.689 ms    345.81 ms
+                                                 2.86509 ms   2.41665 ms   3.89428 ms
 
-StdFunctionRef                                          100         5599   68.8677 ms
-                                                     123 ns       123 ns       123 ns
-                                                       0 ns         0 ns         0 ns
+FunctionRef                                             100            1    9.49015 s
+                                                 95.1617 ms   94.8172 ms   95.6438 ms
+                                                 2.05511 ms   1.55964 ms   2.70784 ms
 
-FunctionRef                                             100        61088   67.1968 ms
-                                                      11 ns        11 ns        11 ns
-                                                       0 ns         0 ns         0 ns
+
+-------------------------------------------------------------------------------
+dataSetSize 100000000 numberOfCalls 1
+-------------------------------------------------------------------------------
+/home/mumakin/CppCon2019/tl-function-ref/main.cpp:84
+...............................................................................
+
+benchmark name                                  samples       iterations    estimated
+                                                mean          low mean      high mean
+                                                std dev       low std dev   high std dev
+-------------------------------------------------------------------------------
+TemplateArg                                             100            1    3.02715 s
+                                                 29.1336 ms   29.0402 ms   29.2673 ms
+                                                 566.777 us   426.023 us   743.078 us
+
+StdFunction                                             100            1    14.0754 s
+                                                   141.6 ms   141.247 ms   142.073 ms
+                                                 2.05899 ms   1.62651 ms   2.56766 ms
+
+FunctionRef                                             100            1    2.91282 s
+                                                 29.3361 ms   29.2084 ms   29.4949 ms
+                                                 723.444 us    608.09 us   853.591 us
