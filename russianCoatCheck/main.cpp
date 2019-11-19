@@ -25,6 +25,10 @@ public:
         {
             return std::optional<T>();
         }
+        if(key != iter->first)
+        {
+            return std::optional<T>();
+        }
         return iter->second;
     }
 
@@ -111,4 +115,18 @@ TEST_CASE("simple remove")
 
     auto bRetrieve {testObject.Get(bKey)};
     REQUIRE_FALSE(bRetrieve);
+}
+
+TEST_CASE("remove and get")
+{
+    Registry<char> testObject;
+    
+    auto aKey {testObject.Insert('a')};
+    auto bKey {testObject.Insert('b')};
+    auto cKey {testObject.Insert('c')};
+
+    testObject.Remove(bKey);
+
+    auto bFind {testObject.Get(bKey)};
+    REQUIRE_FALSE(bFind);
 }
