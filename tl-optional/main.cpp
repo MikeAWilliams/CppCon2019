@@ -67,3 +67,23 @@ TEST_CASE("and_then")
     REQUIRE(shouldBe10);
     REQUIRE(10 == *shouldBe10);
 }
+
+TEST_CASE("and_then lambda")
+{
+    tl::optional<std::string> empty;
+    auto shouldBeEmpty {empty.and_then(
+        [](const std::string& in) -> tl::optional<int>
+        {
+            return std::stoi(in);
+        })};
+    REQUIRE_FALSE(shouldBeEmpty);
+
+    tl::optional<std::string> someData {"10"};
+    auto shouldBe10 {someData.and_then(
+        [](const std::string& in) -> tl::optional<int>
+        {
+            return std::stoi(in);
+        })};
+    REQUIRE(shouldBe10);
+    REQUIRE(10 == *shouldBe10);
+}
