@@ -29,6 +29,28 @@ TEST_CASE("map")
     REQUIRE(9 == *shouldBe9);
 }
 
+TEST_CASE("map lambda")
+{
+    tl::optional<std::string> empty;
+
+    auto shouldBeEmpty {empty.map(
+        [](const std::string& in)
+        {
+            return in + "_stuff";
+        })};
+    REQUIRE_FALSE(shouldBeEmpty);
+
+    tl::optional<std::string> someData {"Some data"};
+
+    auto shouldBe9 {someData.map(
+        [](const std::string& in)
+        {
+            return in + "_stuff";
+        })};
+    REQUIRE(shouldBe9);
+    REQUIRE("Some data_stuff" == *shouldBe9);
+}
+
 tl::optional<int> ToInt(const std::string& input)
 {
     return std::stoi(input);
